@@ -27,7 +27,12 @@ Keep responses under 100 words.
 If asked about pricing, encourage them to use the contact form for a custom audit.
 `; // keep your existing text here
 
-export const sendMessageToGemini = async (message: string, history: any[]): Promise<string> => {
+interface ChatMessage {
+  role: "user" | "model";
+  parts: string | { text: string }[];
+}
+
+export const sendMessageToGemini = async (message: string, history: ChatMessage[]): Promise<string> => {
   try {
     // The correct method is getGenerativeModel
     const model = genAI.getGenerativeModel({ 
@@ -35,7 +40,12 @@ export const sendMessageToGemini = async (message: string, history: any[]): Prom
       systemInstruction: SYSTEM_INSTRUCTION 
     });
 
-    const chat = model.startChat({ history });
+    const formattedHistory = history.map(msg => ({
+      role: msg.role,
+      parts: typeof msg.parts === 'string' ? [{ text: msg.parts }] : msg.parts
+    }));
+
+    const chat = model.startChat({ history: formattedHistory });
     const result = await chat.sendMessage(message);
     const response = await result.response;
     return response.text();
