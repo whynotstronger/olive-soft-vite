@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+/* Define your brand colors for Tailwind v4 */
+@theme {
+  --color-brand-primary: #0ea5e9;    /* Cyan-500 */
+  --color-brand-secondary: #84cc16;  /* Lime-500 */
+  --background-image-brand-gradient: linear-gradient(to right, #0ea5e9, #84cc16);
+}
+
+/* Custom utility for the text gradient */
+@utility text-brand-gradient {
+  background-image: var(--background-image-brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
